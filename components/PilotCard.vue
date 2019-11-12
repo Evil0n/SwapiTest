@@ -21,7 +21,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped lang="scss">
 .text {
   font-size: 14px;
 }
@@ -41,5 +41,6 @@ export default {
 
 .box-card {
   width: 480px;
+  margin-bottom: 20px;
 }
 </style>

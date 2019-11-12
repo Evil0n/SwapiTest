@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" class="st-layout">
     <nav-bar />
     <nuxt />
   </div>
@@ -12,3 +12,8 @@ export default {
   }
 }
 </script>
+<style scoped lang="scss">
+.st-layout {
+  text-align: center;
+}
+</style>
