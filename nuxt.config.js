@@ -1,5 +1,5 @@
 export default {
-  mode: 'universal',
+  mode: 'spa',
   /*
    ** Headers of the page
    */
@@ -46,10 +46,15 @@ export default {
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options
    */
-  axios: {},
+  axios: {
+    proxy: true
+  },
   /*
    ** Build configuration
    */
+  proxy: {
+    '/api/': { target: 'https://swapi.co/api', pathRewrite: { '^/api/': '' } }
+  },
   build: {
     transpile: [/^element-ui/],
     /*

@@ -1,68 +1,63 @@
 <template>
-  <div class="container">
-    <div>
-      <logo />
-      <h1 class="title">
-        SwapiTest
-      </h1>
-      <h2 class="subtitle">
-        My fabulous Nuxt.js project
-      </h2>
-      <div class="links">
-        <a href="https://nuxtjs.org/" target="_blank" class="button--green">
-          Documentation
-        </a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          class="button--grey"
-        >
-          GitHub
-        </a>
-      </div>
-    </div>
+  <div class="st-main">
+    <h1>
+      Список пилотов
+    </h1>
+    <pilot-card
+      v-for="(pilot, id) in people.results"
+      :key="id"
+      :name="pilot.name"
+      :ship-list="getStarshipsByLink(pilot.starships)"
+    />
+    <el-pagination
+      background
+      layout="prev, pager, next"
+      :total="people.count"
+      :disabled="disabled"
+      @current-change="changePage"
+    >
+    </el-pagination>
   </div>
 </template>
-
 <script>
-import Logo from '~/components/Logo.vue'
-
+import { mapState, mapActions } from 'vuex'
+import PilotCard from '@/components/PilotCard.vue'
 export default {
   components: {
-    Logo
+    PilotCard
+  },
+  data() {
+    return {
+      disabled: false
+    }
+  },
+  computed: {
+    ...mapState('people', ['people', 'starshipsForPilots'])
+  },
+  fetch({ store }) {
+    return store.dispatch('people/getPeople')
+  },
+  methods: {
+    ...mapActions('people', ['getPeople']),
+    changePage(event) {
+      this.disabled = true
+      this.getPeople({ page: event }).then(() => {
+        this.disabled = false
+      })
+    },
+    getStarshipsByLink(starshipsLinkList) {
+      return starshipsLinkList.map((link) => {
+        return this.starshipsForPilots[link]
+      })
+    }
   }
 }
 </script>
-
-<style>
-.container {
-  margin: 0 auto;
-  min-height: 100vh;
+<style scoped lang="scss">
+.st-main {
   display: flex;
-  justify-content: center;
   align-items: center;
-  text-align: center;
-}
-
-.title {
-  font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
-}
-
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
-}
-
-.links {
-  padding-top: 15px;
+  justify-content: center;
+  flex-direction: column;
 }
 </style>
