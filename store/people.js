@@ -3,7 +3,9 @@ import Vue from 'vue'
 export const state = () => ({
   people: {},
   currentPage: 1,
-  starshipsForPilots: {}
+  starshipsForPilots: {},
+  StarList: {},
+  pilotForStar: {}
 })
 export const mutations = {
   setPeople(state, payload) {
@@ -11,6 +13,13 @@ export const mutations = {
   },
   saveStarship(state, payload) {
     Vue.set(state.starshipsForPilots, payload.id, payload.starship)
+  },
+  /* asdlfkhgasodjfhasgfjasdhgfkjhasgdkfjhasdgkfhgsakdhfksjadhgfkjsahgdfkjhsagkdjfhgskadjfhgksajdghfkjsadhgfkjsdgh */
+  setStarList(state, payload) {
+    Vue.set(state, 'starList', payload)
+  },
+  saveStarPilot(state, payload) {
+    Vue.set(state.pilotForStar, payload.id, payload.starship)
   }
 }
 
