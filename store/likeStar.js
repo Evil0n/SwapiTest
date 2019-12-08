@@ -1,3 +1,5 @@
+import vue from 'vue'
+
 export const state = () => ({
   likedStars: []
 })
@@ -12,5 +14,9 @@ export const mutations = {
     } else {
       state.likedStars.splice(findedStarIndex, 1)
     }
+    localStorage.setItem('starsWithLike', JSON.stringify(state.likedStars))
+  },
+  refreshLikedStars(state, likedStars) {
+    vue.set(state, 'likedStars', likedStars)
   }
 }

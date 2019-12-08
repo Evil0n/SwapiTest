@@ -6,16 +6,20 @@ export const state = () => ({
 
 export const mutations = {
   saveNewPilot(state, { url, name }) {
-    vue.set(state.createdPilotsForStar, url, [
-      ...(state.createdPilotsForStar[url] || []),
-      name
-    ])
+    if (
+      state.createdPilotsForStar[url] &&
+      Array.isArray(state.createdPilotsForStar[url])
+    ) {
+      state.createdPilotsForStar[url].push(name)
+    } else {
+      vue.set(state.createdPilotsForStar, url, [name])
+    }
     localStorage.setItem(
-      'createdPilotsForStar',
+      'createdPilots',
       JSON.stringify(state.createdPilotsForStar)
     )
   },
-  refreshPilots(state, payload) {
-    vue.set(state, 'createdPilotsForStar', payload)
+  refreshPilots(state, pilots) {
+    vue.set(state, 'createdPilotsForStar', pilots)
   }
 }

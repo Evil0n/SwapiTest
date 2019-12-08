@@ -9,20 +9,18 @@
     >
       <star-card
         :name="valueStarShip.name"
-        :pilot-list="getPilotByLink(valueStarShip.pilots)"
+        :pilot-list="getAllPilots(valueStarShip)"
         @like="
           toggleLikedStars({
-            valueStarShip,
-            pilots: getPilotByLink(valueStarShip.pilots)
+            star: valueStarShip,
+            pilots: getAllPilots(valueStarShip)
           })
         "
-        @create-pilot="dialog = !dialog"
+        @create-pilot="dialog = valueStarShip.url"
       />
-      {{ valueStarShip.name }}
       <create-new-pilot
-        :star="valueStarShip"
-        :visible="dialog"
-        @update:visible="dialog = $event"
+        :visible="dialog === valueStarShip.url"
+        @update:visible="onVisibilityChange($event, valueStarShip.url)"
         @add-pilot="create($event, valueStarShip)"
       />
     </div>
@@ -57,10 +55,10 @@ export default {
     ...mapState('newPilots', ['createdPilotsForStar'])
   },
   fetch({ store }) {
-    const createdPilotsA = JSON.parse(
-      localStorage.getItem('createdPilotsForStar')
-    )
-    store.commit('newPilots/refreshPilots', createdPilotsA)
+    const createdPilotsA = JSON.parse(localStorage.getItem('createdPilots'))
+    const likedStars = JSON.parse(localStorage.getItem('starsWithLike'))
+    store.commit('newPilots/refreshPilots', createdPilotsA || {})
+    store.commit('likeStar/refreshLikedStars', likedStars || [])
     return store.dispatch('StarList/getStarList')
   },
   methods: {
@@ -74,15 +72,21 @@ export default {
         this.disabled = false
       })
     },
+    getAllPilots(star) {
+      return [
+        ...this.getPilotByLink(star.pilots),
+        ...(this.createdPilotsForStar[star.url] || [])
+      ]
+    },
     getPilotByLink(pilotLinkList) {
       return pilotLinkList.map((link) => {
         return this.pilotForStar[link]
       })
     },
+    onVisibilityChange(e, url) {
+      this.dialog = e ? url : ''
+    },
     create(name, star) {
-      /* вытащить урл корабля (стар), создать объект в котором должны быть скомпанованы имя и ай ди корабля */
-      console.log(name, 'name', star, 'star', { [star.url]: [name] })
-      console.log(this.getPilotByLink(star.pilots))
       const starWithNewPilot = {
         url: star.url,
         name

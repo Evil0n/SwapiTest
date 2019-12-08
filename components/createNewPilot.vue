@@ -16,12 +16,6 @@
 
 <script>
 export default {
-  props: {
-    star: {
-      type: Object,
-      required: true
-    }
-  },
   data() {
     return {
       form: {
@@ -32,7 +26,7 @@ export default {
   },
   methods: {
     create() {
-      this.$emit('add-pilot', { name: this.form.name, star: this.star })
+      this.$emit('add-pilot', { name: this.form.name })
       this.$emit('update:visible', false)
       this.form.name = ''
     }

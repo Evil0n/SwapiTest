@@ -22,6 +22,10 @@ export default {
   computed: {
     ...mapState('likeStar', ['likedStars'])
   },
+  fetch({ store }) {
+    const likedStars = JSON.parse(localStorage.getItem('starsWithLike'))
+    store.commit('likeStar/refreshLikedStars', likedStars || [])
+  },
   methods: {
     ...mapMutations('likeStar', ['toggleLikedStars'])
   }
